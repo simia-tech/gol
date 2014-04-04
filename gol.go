@@ -5,6 +5,7 @@ import (
 	"log"
 	"log/syslog"
 	"os"
+	"fmt"
 )
 
 func Initialize(configurations ...*Configuration) error {
@@ -22,6 +23,8 @@ func Initialize(configurations ...*Configuration) error {
 		switch (backend) {
 		case BACKEND_CONSOLE:
 			addConsoleOutput(mask)
+		case BACKEND_FILE:
+			addFileOutput(mask, configuration)
 		case BACKEND_SYSLOG:
 			addSyslogOutput(mask, configuration)
 		}
@@ -34,11 +37,22 @@ func addConsoleOutput(mask mask) {
 	addOutputWriter(mask, os.Stdout)
 }
 
+func addFileOutput(mask mask, configuration *Configuration) {
+	var mode int
+	fmt.Sscanf(configuration.Mode, "%o", &mode)
+
+	logFile, error := os.OpenFile(configuration.Path, os.O_RDWR|os.O_CREATE|os.O_APPEND, os.FileMode(mode))
+	if error != nil {
+		log.Fatal(error)
+	}
+
+	addOutputWriter(mask, logFile)
+}
+
 func addSyslogOutput(mask mask, configuration *Configuration) {
 	writer, error := syslog.New(syslog.LOG_DEBUG | syslog.LOG_MAIL, configuration.Prefix)
 	if error != nil {
-		Handle(error)
-		return
+		log.Fatal(error)
 	}
 
 	addOutputWriter(mask, writer)
