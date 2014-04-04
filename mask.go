@@ -14,7 +14,7 @@ func maskByName(name string) (mask mask, error error) {
 	case "all":
 		mask = MASK_ALL
 		return
-	case "default":
+	case "default", "":
 		mask = MASK_DEFAULT
 		return
 	}
