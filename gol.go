@@ -1,11 +1,11 @@
 package gol
 
 import (
+	"fmt"
 	"io"
 	"log"
 	"log/syslog"
 	"os"
-	"fmt"
 )
 
 func Initialize(configurations ...*Configuration) error {
@@ -20,7 +20,7 @@ func Initialize(configurations ...*Configuration) error {
 			return error
 		}
 
-		switch (backend) {
+		switch backend {
 		case BACKEND_CONSOLE:
 			addConsoleOutput(mask)
 		case BACKEND_FILE:
@@ -50,7 +50,7 @@ func addFileOutput(mask mask, configuration *Configuration) {
 }
 
 func addSyslogOutput(mask mask, configuration *Configuration) {
-	writer, error := syslog.New(syslog.LOG_DEBUG | syslog.LOG_MAIL, configuration.Prefix)
+	writer, error := syslog.New(syslog.LOG_DEBUG|syslog.LOG_MAIL, configuration.Prefix)
 	if error != nil {
 		log.Fatal(error)
 	}
@@ -60,7 +60,7 @@ func addSyslogOutput(mask mask, configuration *Configuration) {
 
 func addOutputWriter(mask mask, writer io.Writer) {
 	for _, level := range allLevels {
-		if int(mask) & int(level) != 0 {
+		if int(mask)&int(level) != 0 {
 			channel := channels[level]
 			channel.writers = append(channel.writers, writer)
 			channel.logger = log.New(io.MultiWriter(channel.writers...), channel.logger.Prefix(), channel.logger.Flags())

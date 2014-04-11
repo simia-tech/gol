@@ -11,7 +11,7 @@ const (
 )
 
 func backendByName(name string) (backend, error) {
-	switch (name) {
+	switch name {
 	case string(BACKEND_CONSOLE):
 		return BACKEND_CONSOLE, nil
 	case string(BACKEND_FILE):

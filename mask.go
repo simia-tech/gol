@@ -10,7 +10,7 @@ const (
 )
 
 func maskByName(name string) (mask mask, error error) {
-	switch (name) {
+	switch name {
 	case "all":
 		mask = MASK_ALL
 		return

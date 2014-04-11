@@ -6,9 +6,9 @@ type Configuration struct {
 	Mask    string `json:"mask"`
 
 	// file
-	Path    string `json:"path"`
-	Mode    string `json:"mode"`
+	Path string `json:"path"`
+	Mode string `json:"mode"`
 
 	// syslog
-	Prefix  string `json:"prefix"`
+	Prefix string `json:"prefix"`
 }
