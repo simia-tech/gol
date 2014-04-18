@@ -18,7 +18,7 @@ See [godoc](http://godoc.org/github.com/simia-tech/gol) for more details.
 
 	func main() {
 		gol.Initialize(
-			&gol.Configuration{Backend: "console", Mask: "all"},
+			&gol.Configuration{Backend: "console", Mask: "all", Color: true},
 			&gol.Configuration{Backend: "syslog", Prefix: "gol-test"})
 
 		gol.Info("number %d", 1)
