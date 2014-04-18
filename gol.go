@@ -37,7 +37,7 @@ func Initialize(configurations ...*Configuration) error {
 
 		switch backend {
 		case BACKEND_CONSOLE:
-			addConsoleOutput(mask)
+			addConsoleOutput(mask, configuration)
 		case BACKEND_FILE:
 			addFileOutput(mask, configuration)
 		case BACKEND_SYSLOG:
@@ -48,7 +48,13 @@ func Initialize(configurations ...*Configuration) error {
 	return nil
 }
 
-func addConsoleOutput(mask mask) {
+func addConsoleOutput(mask mask, configuration *Configuration) {
+	if configuration.Color {
+		for _, level := range allLevels {
+			channels[level].mapper = buildTerminalColorMapper(colorMapping[level])
+		}
+	}
+
 	addOutputWriter(mask, os.Stdout)
 }
 

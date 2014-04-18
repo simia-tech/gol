@@ -1,6 +1,7 @@
 package gol
 
 import (
+	"fmt"
 	"io"
 	"io/ioutil"
 	"log"
@@ -8,6 +9,7 @@ import (
 
 type channel struct {
 	writers []io.Writer
+	mapper  mapper
 	logger  *log.Logger
 }
 
@@ -19,29 +21,37 @@ var channels = map[level]*channel{
 	LEVEL_DEBUG:    &channel{writers: make([]io.Writer, 0, 2), logger: log.New(ioutil.Discard, "D ", log.LstdFlags)},
 }
 
+func (c *channel) Printf(format string, values ...interface{}) {
+	if c.mapper == nil {
+		c.logger.Printf(format, values...)
+	} else {
+		c.logger.Printf(c.mapper(fmt.Sprintf(format, values...)))
+	}
+}
+
 // Critical uses format and values to generate a log message on the critical channel.
 func Critical(format string, values ...interface{}) {
-	channels[LEVEL_CRITICAL].logger.Printf(format, values...)
+	channels[LEVEL_CRITICAL].Printf(format, values...)
 }
 
 // Error uses format and values to generate a log message on the error channel.
 func Error(format string, values ...interface{}) {
-	channels[LEVEL_ERROR].logger.Printf(format, values...)
+	channels[LEVEL_ERROR].Printf(format, values...)
 }
 
 // Warning uses format and values to generate a log message on the warning channel.
 func Warning(format string, values ...interface{}) {
-	channels[LEVEL_WARNING].logger.Printf(format, values...)
+	channels[LEVEL_WARNING].Printf(format, values...)
 }
 
 // Info uses format and values to generate a log message on the info channel.
 func Info(format string, values ...interface{}) {
-	channels[LEVEL_INFO].logger.Printf(format, values...)
+	channels[LEVEL_INFO].Printf(format, values...)
 }
 
 // Debug uses format and values to generate a log message on the debug channel.
 func Debug(format string, values ...interface{}) {
-	channels[LEVEL_DEBUG].logger.Printf(format, values...)
+	channels[LEVEL_DEBUG].Printf(format, values...)
 }
 
 // Handle takes the given error and writes it to all channels that correspond to the given levels. If no level is
@@ -51,7 +61,7 @@ func Handle(error error, levels ...level) {
 		Handle(error, LEVEL_ERROR)
 	} else {
 		for _, level := range levels {
-			channels[level].logger.Print(error)
+			channels[level].Printf(error.Error())
 		}
 	}
 }

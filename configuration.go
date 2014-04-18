@@ -7,6 +7,9 @@ type Configuration struct {
 	Backend string `json:"backend"`
 	Mask    string `json:"mask"`
 
+	// console
+	Color bool `json:"color"`
+
 	// file
 	Path string `json:"path"`
 	Mode string `json:"mode"`
