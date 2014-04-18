@@ -1,5 +1,7 @@
 package gol
 
+// Configuration holds all information that specify a single gol backend. While the common properties are needed
+// for each backend, it holds also backend-specific properties.
 type Configuration struct {
 	// common
 	Backend string `json:"backend"`

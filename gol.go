@@ -1,3 +1,8 @@
+/*
+gol is an extended logger for go, that can log to a console, file and syslog backend via a single interface. It
+supports multiple logging channels and the output can be filtered using a mask. On top of this, multiple of
+backends can be used at the same time.
+*/
 package gol
 
 import (
@@ -8,6 +13,16 @@ import (
 	"os"
 )
 
+/*
+Initialize sets up gol with a number of given configurations. Each configuration specified a single backend. By
+default, no backend is specified. In order to see any log message, Initialize has to be called.
+
+For example
+
+		gol.Initialize(&gol.Configuration{Backend: "console", Mask: "all"})
+
+will log all messages to the console.
+*/
 func Initialize(configurations ...*Configuration) error {
 	for _, configuration := range configurations {
 		backend, error := backendByName(configuration.Backend)
