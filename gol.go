@@ -71,7 +71,7 @@ func addFileOutput(mask mask, configuration *Configuration) {
 }
 
 func addSyslogOutput(mask mask, configuration *Configuration) {
-	writer, error := syslog.New(syslog.LOG_DEBUG|syslog.LOG_MAIL, configuration.Prefix)
+	writer, error := syslog.New(syslog.LOG_EMERG|syslog.LOG_LOCAL0, configuration.Prefix)
 	if error != nil {
 		log.Fatal(error)
 	}
