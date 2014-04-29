@@ -5,6 +5,7 @@ import (
 	"io"
 	"io/ioutil"
 	"log"
+	"github.com/juju/errgo"
 )
 
 type channel struct {
@@ -60,12 +61,12 @@ func Debug(format string, values ...interface{}) {
 
 // Handle takes the given error and writes it to all channels that correspond to the given levels. If no level is
 // given, the error will be published on the error channel.
-func Handle(error error, levels ...level) {
+func Handle(err error, levels ...level) {
 	if len(levels) == 0 {
-		Handle(error, LEVEL_ERROR)
+		Handle(err, LEVEL_ERROR)
 	} else {
 		for _, level := range levels {
-			channels[level].Printf(error.Error())
+			channels[level].Printf(errgo.Details(err))
 		}
 	}
 }
