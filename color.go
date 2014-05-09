@@ -21,6 +21,7 @@ var colorMapping = map[level]color{
 	LEVEL_WARNING:  colorYellow,
 	LEVEL_INFO:     colorGreen,
 	LEVEL_DEBUG:    colorCyan,
+	LEVEL_PROTOCOL: colorWhite,
 }
 
 func surroundColor(text string, color color) string {

@@ -2,10 +2,10 @@ package gol
 
 import (
 	"fmt"
+	"github.com/juju/errgo"
 	"io"
 	"io/ioutil"
 	"log"
-	"github.com/juju/errgo"
 )
 
 type channel struct {
@@ -20,6 +20,7 @@ var channels = map[level]*channel{
 	LEVEL_WARNING:  &channel{writers: make([]io.Writer, 0, 2), logger: log.New(ioutil.Discard, "W ", log.LstdFlags)},
 	LEVEL_INFO:     &channel{writers: make([]io.Writer, 0, 2), logger: log.New(ioutil.Discard, "I ", log.LstdFlags)},
 	LEVEL_DEBUG:    &channel{writers: make([]io.Writer, 0, 2), logger: log.New(ioutil.Discard, "D ", log.LstdFlags)},
+	LEVEL_PROTOCOL: &channel{writers: make([]io.Writer, 0, 2), logger: log.New(ioutil.Discard, "P ", log.LstdFlags)},
 }
 
 func (c *channel) Printf(format string, values ...interface{}) {
@@ -53,6 +54,11 @@ func Info(format string, values ...interface{}) {
 // Debug uses format and values to generate a log message on the debug channel.
 func Debug(format string, values ...interface{}) {
 	channels[LEVEL_DEBUG].Printf(format, values...)
+}
+
+// Debug uses format and values to generate a log message on the debug channel.
+func Protocol(format string, values ...interface{}) {
+	channels[LEVEL_PROTOCOL].Printf(format, values...)
 }
 
 // Handle takes the given error and writes it to all channels that correspond to the given levels. If no level is
