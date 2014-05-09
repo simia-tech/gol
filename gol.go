@@ -11,6 +11,7 @@ import (
 	"log"
 	"log/syslog"
 	"os"
+	"io/ioutil"
 )
 
 /*
@@ -24,7 +25,7 @@ For example
 will log all messages to the console.
 */
 func Initialize(configurations ...*Configuration) error {
-	channels = initChannels()
+	clearOutputWriters()
 	for _, configuration := range configurations {
 		backend, error := backendByName(configuration.Backend)
 		if error != nil {
@@ -78,6 +79,14 @@ func addSyslogOutput(mask mask, configuration *Configuration) {
 	}
 
 	addOutputWriter(mask, writer)
+}
+
+func clearOutputWriters() {
+	for _, level := range allLevels {
+		channel := channels[level]
+		channel.writers = make([]io.Writer, 0, 3)
+		channel.logger = log.New(ioutil.Discard, channel.logger.Prefix(), channel.logger.Flags())
+	}
 }
 
 func addOutputWriter(mask mask, writer io.Writer) {
