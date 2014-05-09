@@ -24,6 +24,7 @@ For example
 will log all messages to the console.
 */
 func Initialize(configurations ...*Configuration) error {
+	channels = initChannels()
 	for _, configuration := range configurations {
 		backend, error := backendByName(configuration.Backend)
 		if error != nil {
