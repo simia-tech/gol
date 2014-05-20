@@ -6,6 +6,7 @@ import (
 	"io"
 	"io/ioutil"
 	"log"
+	"runtime"
 )
 
 type channel struct {
@@ -71,4 +72,10 @@ func Handle(err error, levels ...level) {
 			channels[level].Printf(errgo.Details(err))
 		}
 	}
+}
+
+func Panic(v interface{}) {
+	buffer := make([]byte, 4096)
+	length := runtime.Stack(buffer, false)
+	Critical("got panic: %v\n%s", v, string(buffer[:length]))
 }
