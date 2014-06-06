@@ -8,10 +8,10 @@ package gol
 import (
 	"fmt"
 	"io"
+	"io/ioutil"
 	"log"
 	"log/syslog"
 	"os"
-	"io/ioutil"
 )
 
 /*
