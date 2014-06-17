@@ -19,7 +19,7 @@ func maskByName(name string) (mask mask, error error) {
 	case "debug":
 		mask = MASK_DEBUG
 		return
-	case "default", "":
+	case "default", "info", "":
 		mask = MASK_DEFAULT
 		return
 	case "warning":
