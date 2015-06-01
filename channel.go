@@ -2,11 +2,12 @@ package gol
 
 import (
 	"fmt"
-	"github.com/juju/errgo"
 	"io"
 	"io/ioutil"
 	"log"
 	"runtime"
+
+	"gopkg.in/errgo.v1"
 )
 
 type channel struct {
